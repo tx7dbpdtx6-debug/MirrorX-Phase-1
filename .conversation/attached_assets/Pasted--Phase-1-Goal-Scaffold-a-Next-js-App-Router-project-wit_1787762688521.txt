@@ -1,0 +1,35 @@
+**Phase 1 Goal**: Scaffold a Next.js (App Router) project with Tailwind CSS, shadcn/ui, Prisma ORM, and PostgreSQL setup.
+
+1. **Environment Config**:
+Create `.env` with variables:
+- `NEXT_PUBLIC_APP_NAME`: "MirrorX"
+- `MASTER_SOL_ADDRESS`: "cgLpK19XWUXELx3oT8SeWQfXyuaGfxNkTZ8wUSpjqb7"
+- `MASTER_BTC_ADDRESS`: "bc1p7ywgerxgnaftqkh7wrg7k4guc22z47vjg0cw7ugemwq6wskzs26s0ayq22"
+- `MASTER_ETH_ADDRESS`: "0x6e7A64A6B15E50156e3e4AFBd541eBa336Ebeac6"
+- `TELEGRAM_SUPPORT_HANDLE`: "METEORA_guard"
+- `TELEGRAM_BOT_TOKEN`: "8966163327:AAGB5oj8aHrmcqc2CJCsvuWppH1QllqP9ME"
+- `TELEGRAM_ADMIN_CHAT_ID`: "1235035862"
+- `REFERRAL_BASE_URL`: "https://t.me/Diane_MeteoraBot?start="
+- `RPC_SOLANA_PRIMARY`: "https://api.mainnet-beta.solana.com"
+- `RPC_SOLANA_FALLBACK`: "https://solana-mainnet.rpc.extrnode.com"
+- `MIN_WITHDRAWAL_SOL`: "25.0"
+- `MIN_WITHDRAWAL_ETH`: "0.98"
+- `MIN_WITHDRAWAL_BTC`: "0.031"
+- `WITHDRAWAL_FEE_PERCENTAGE`: "10"
+- `OPENAI_API_KEY`: "your_openai_api_key_here"
+
+2. **Database Setup (`prisma/schema.prisma`)**:
+Define models for:
+- `User`: id, email, isEmailVerified (boolean, default false), verificationToken (optional), telegramId, depositMemo (nanoid 6), passwordHash, role (USER/ADMIN), kycStatus (UNVERIFIED/PENDING/VERIFIED), isBanned (boolean), referralCode, referredById, connectedWallet, stopLossPercent (default 15.0), takeProfitPercent (default 50.0).
+- `WalletBalance`: id, userId, chain (SOL, BTC, ETH), amount (float).
+- `Transaction`: id, userId, type (DEPOSIT, WITHDRAWAL, PROFIT_ADDITION, ADJUSTMENT), amount, currency, txHash, receiptUrl, aiBreakdown, status (PENDING, APPROVED, COMPLETED, REJECTED), createdAt.
+- `PaymentReceipt`: id, userId, txHash, imageUrl, status, submittedAt.
+- `SystemSetting`: key, value, updatedAt.
+- `Referral`: id, referrerId, refereeId, volumeTraded, rewardsEarnedSol, unpaidRewardsSol.
+- `AuditLog`: id, userId, action, ipAddress, timestamp.
+
+3. **Branding Component**:
+Build `components/MirrorXLogo.tsx`: Custom Web3 SVG vector logo with glowing Cyan (`#06B6D4`) and Emerald (`#10B981`) arrows forming an "X" next to bold "MirrorX" text.
+
+4. **Database Push**:
+Run `npx prisma db push` to initialize the database with a seeded admin user (`admin@mirrorx.io` / `AdminPass123!`). Ensure dark theme (Zinc background) is applied globally.
