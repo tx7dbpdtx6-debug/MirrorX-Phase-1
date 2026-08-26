@@ -10,6 +10,16 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Portfolio overview and activity
+  - name: wallets
+    description: Multi-chain wallet balances
+  - name: transactions
+    description: Deposit and withdrawal activity
+  - name: referrals
+    description: Referral performance
+  - name: settings
+    description: Public application settings
 paths:
   /healthz:
     get:
@@ -24,6 +34,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get the portfolio dashboard
+      responses:
+        "200":
+          description: Portfolio overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /wallet-balances:
+    get:
+      operationId: getWalletBalances
+      tags: [wallets]
+      summary: List wallet balances
+      responses:
+        "200":
+          description: Multi-chain wallet balances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WalletBalance"
+  /transactions:
+    get:
+      operationId: getTransactions
+      tags: [transactions]
+      summary: List recent transactions
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: Recent transaction activity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+  /referrals:
+    get:
+      operationId: getReferralSummary
+      tags: [referrals]
+      summary: Get referral performance
+      responses:
+        "200":
+          description: Referral summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralSummary"
+  /settings:
+    get:
+      operationId: getPublicSettings
+      tags: [settings]
+      summary: Get public application settings
+      responses:
+        "200":
+          description: Public application settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicSettings"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +116,117 @@ components:
           type: string
       required:
         - status
+    WalletBalance:
+      type: object
+      properties:
+        id:
+          type: string
+        chain:
+          type: string
+          enum: [SOL, BTC, ETH]
+        amount:
+          type: number
+        symbol:
+          type: string
+        usdValue:
+          type: number
+        changePercent:
+          type: number
+      required: [id, chain, amount, symbol, usdValue, changePercent]
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [DEPOSIT, WITHDRAWAL, PROFIT_ADDITION, ADJUSTMENT]
+        amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [PENDING, APPROVED, COMPLETED, REJECTED]
+        txHash:
+          type: [string, "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, type, amount, currency, status, txHash, createdAt]
+    DashboardSummary:
+      type: object
+      properties:
+        totalBalanceUsd:
+          type: number
+        totalProfitUsd:
+          type: number
+        profitPercent:
+          type: number
+        activePositions:
+          type: number
+        accountStatus:
+          type: string
+          enum: [UNVERIFIED, PENDING, VERIFIED]
+        referralCode:
+          type: string
+        chart:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartPoint"
+      required:
+        - totalBalanceUsd
+        - totalProfitUsd
+        - profitPercent
+        - activePositions
+        - accountStatus
+        - referralCode
+        - chart
+    ChartPoint:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: number
+      required: [label, value]
+    ReferralSummary:
+      type: object
+      properties:
+        referralCode:
+          type: string
+        invitedCount:
+          type: number
+        volumeTraded:
+          type: number
+        rewardsEarnedSol:
+          type: number
+        unpaidRewardsSol:
+          type: number
+      required:
+        - referralCode
+        - invitedCount
+        - volumeTraded
+        - rewardsEarnedSol
+        - unpaidRewardsSol
+    PublicSettings:
+      type: object
+      properties:
+        appName:
+          type: string
+        supportHandle:
+          type: string
+        minWithdrawal:
+          type: object
+          properties:
+            SOL:
+              type: number
+            BTC:
+              type: number
+            ETH:
+              type: number
+          required: [SOL, BTC, ETH]
+        withdrawalFeePercentage:
+          type: number
+      required: [appName, supportHandle, minWithdrawal, withdrawalFeePercentage]
 

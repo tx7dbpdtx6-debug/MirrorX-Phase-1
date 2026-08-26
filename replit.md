@@ -1,6 +1,6 @@
-# [Project name]
+# MirrorX
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+MirrorX is a dark Web3 portfolio dashboard for monitoring multi-chain balances, activity, referrals, and withdrawal settings.
 
 ## Run & Operate
 
@@ -22,15 +22,22 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/mirrorx/src/` — responsive dashboard UI, routes, shell, and brand components
+- `artifacts/api-server/src/routes/mirrorx.ts` — dashboard, wallet, activity, referral, and settings API
+- `lib/api-spec/openapi.yaml` — source of truth for API contracts
+- `lib/db/src/schema/mirrorx.ts` — Drizzle schema for users, balances, transactions, referrals, receipts, settings, and audit logs
+- `artifacts/mirrorx/src/index.css` — global dark theme tokens and visual system
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The workspace uses React + Vite for web artifacts and Drizzle ORM for PostgreSQL, so the requested Next.js/Prisma concepts are mapped onto the existing supported stack rather than introducing a second toolchain.
+- API contracts are OpenAPI-first and generated into the shared React client and Zod package.
+- The initial dashboard is backed by seeded development data for the admin preview account; authentication and user-scoped data can be layered on with Clerk in a later phase.
+- Secrets stay in Replit Secrets; public chain addresses and product configuration are environment variables.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+The first phase provides an overview of portfolio value and performance, multi-chain wallet balances, recent transaction activity, referral rewards, and public withdrawal/support settings.
 
 ## User preferences
 
@@ -38,7 +45,8 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run `pnpm --filter @workspace/api-spec run codegen` after changing `lib/api-spec/openapi.yaml`.
+- The shared API server is routed under `/api`; the MirrorX web artifact is routed at `/`.
 
 ## Pointers
 

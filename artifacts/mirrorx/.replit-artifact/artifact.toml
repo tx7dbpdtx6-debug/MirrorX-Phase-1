@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "MirrorX"
+description = "A dark Web3 portfolio and treasury dashboard for tracking multi-chain balances, deposits, withdrawals, referrals, and transaction activity with a polished crypto-native experience."
+version = "1.0.0"
+id = "artifacts/mirrorx"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20960
+
+[services.development]
+run = "pnpm --filter @workspace/mirrorx run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mirrorx", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mirrorx/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20960"
+BASE_PATH = "/"

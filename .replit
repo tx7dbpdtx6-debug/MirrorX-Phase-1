@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [deployment]
 router = "application"
@@ -18,3 +18,23 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+MASTER_BTC_ADDRESS = "bc1p7ywgerxgnaftqkh7wrg7k4guc22z47vjg0cw7ugemwq6wskzs26s0ayq22"
+MASTER_ETH_ADDRESS = "0x6e7A64A6B15E50156e3e4AFBd541eBa336Ebeac6"
+MASTER_SOL_ADDRESS = "cgLpK19XWUXELx3oT8SeWQfXyuaGfxNkTZ8wUSpjqb7"
+MIN_WITHDRAWAL_BTC = "0.031"
+MIN_WITHDRAWAL_ETH = "0.98"
+MIN_WITHDRAWAL_SOL = "25.0"
+NEXT_PUBLIC_APP_NAME = "MirrorX"
+REFERRAL_BASE_URL = "https://t.me/Diane_MeteoraBot?start="
+RPC_SOLANA_FALLBACK = "https://solana-mainnet.rpc.extrnode.com"
+RPC_SOLANA_PRIMARY = "https://api.mainnet-beta.solana.com"
+TELEGRAM_ADMIN_CHAT_ID = "1235035862"
+TELEGRAM_SUPPORT_HANDLE = "METEORA_guard"
+WITHDRAWAL_FEE_PERCENTAGE = "10"

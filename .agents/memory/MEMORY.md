@@ -1,0 +1,1 @@
+- [Supported application stack](supported-stack.md) — Keep MirrorX on the monorepo’s React/Vite, Express, OpenAPI, and Drizzle/PostgreSQL conventions.
